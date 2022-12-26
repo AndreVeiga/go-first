@@ -1,26 +1,28 @@
 package main
 
 import "fmt"
+import "os"
 
 func main() {
-	nome := pegarNome()
-
-	fmt.Println("Seja bem-vindo, ", nome)
+	exibeIntroducao()
 	comando := exibirMenu()
 
-	if comando == 1 {
+	switch comando {
+	case 1:
 		fmt.Println("Monitorando...")
-	} else if comando == 2 {
+	case 2:
 		fmt.Println("Exibindo logs...")
-	} else if comando == 0 {
+	case 0:
 		fmt.Println("Saindo do programa.")
-	} else {
+		os.Exit(0)
+	default:
 		fmt.Println("Não reconheço esse comando")
+		os.Exit(-1)
 	}
 
 }
 
-func pegarNome() string {
+func exibeIntroducao() {
 	var nome string
 	
 	fmt.Println("Olá, digite seu nome: ")
@@ -28,7 +30,7 @@ func pegarNome() string {
 
 	limpaTela()
 
-	return nome
+	fmt.Println("Seja bem-vindo, ", nome)
 }
 
 func limpaTela() {
