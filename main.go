@@ -25,7 +25,7 @@ func main() {
 		case 1:
 			iniciarMonitoracao()
 		case 2:
-			fmt.Println("Exibindo logs...")
+			imprimeLogs()
 		case 0:
 			fmt.Println("Saindo do programa.")
 			os.Exit(0)
@@ -33,6 +33,16 @@ func main() {
 			fmt.Println("Não reconheço esse comando")
 			os.Exit(-1)
 		}
+	}
+}
+
+func imprimeLogs() {
+	arquivosLogs := leArquivo(arquivosLogs)
+
+	fmt.Println("Começando os logs:")
+
+	for _, log := range arquivosLogs {
+		fmt.Println(log)
 	}
 }
 
@@ -44,45 +54,45 @@ func registraLog(site string, status int) {
 		log2 := " com status:" + strconv.FormatInt(int64(status), 10)
 
 		arquivo.WriteString(log1 + log2 + "\n")
-		
+
 		arquivo.Close()
 	} else {
 		fmt.Println("Arquivo " + arquivosLogs + "com problemas.")
 	}
 }
 
-func leArquivo() []string {
-	var sites []string
+func leArquivo(nomeArquivo string) []string {
+	var arquivos []string
 
-	arquivo, err := os.Open(arquivoSites)
+	arquivo, err := os.Open(nomeArquivo)
 
-	if err != nil {
+	if err == nil {
+		leitor := bufio.NewReader(arquivo)
+
+		for {
+			linha, err := leitor.ReadString('\n')
+
+			linha = strings.TrimSpace(linha)
+
+			arquivos = append(arquivos, linha)
+
+			if err == io.EOF {
+				break
+			}
+		}
+
+		arquivo.Close()
+	} else {
 		fmt.Println("Ocorreu um erro:", err)
 	}
 
-	leitor := bufio.NewReader(arquivo)
-
-	for {
-		linha, err := leitor.ReadString('\n')
-
-		linha = strings.TrimSpace(linha)
-
-		sites = append(sites, linha)
-
-		if err == io.EOF {
-			break
-		}
-	}
-
-	arquivo.Close()
-
-	return sites
+	return arquivos
 }
 
 func iniciarMonitoracao() {
 	fmt.Println("Monitorando...")
 
-	sites := leArquivo()
+	sites := leArquivo(arquivoSites)
 
 	for i := 0; i < monitoramentos; i++ {
 		for _, site := range sites {
