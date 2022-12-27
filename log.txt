@@ -1,0 +1,9 @@
+27/12/2022 00:59:18 https://www.alura.com.br com status:200
+27/12/2022 00:59:19 https://www.caelum.com.br com status:200
+27/12/2022 00:59:21 https://www.google.com.br com status:200
+27/12/2022 00:59:26 https://www.alura.com.br com status:200
+27/12/2022 00:59:27 https://www.caelum.com.br com status:200
+27/12/2022 00:59:27 https://www.google.com.br com status:200
+27/12/2022 00:59:32 https://www.alura.com.br com status:200
+27/12/2022 00:59:32 https://www.caelum.com.br com status:200
+27/12/2022 00:59:32 https://www.google.com.br com status:200

@@ -6,13 +6,15 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
 
 const monitoramentos = 3
 const delay = 5 * time.Second
-const nomeArquivo = "sites.txt"
+const arquivoSites = "sites.txt"
+const arquivosLogs = "log.txt"
 
 func main() {
 	exibeIntroducao()
@@ -34,10 +36,25 @@ func main() {
 	}
 }
 
+func registraLog(site string, status int) {
+	arquivo, err := os.OpenFile(arquivosLogs, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+
+	if err == nil {
+		log1 := time.Now().Format("02/01/2006 15:04:05") + " " + site
+		log2 := " com status:" + strconv.FormatInt(int64(status), 10)
+
+		arquivo.WriteString(log1 + log2 + "\n")
+		
+		arquivo.Close()
+	} else {
+		fmt.Println("Arquivo " + arquivosLogs + "com problemas.")
+	}
+}
+
 func leArquivo() []string {
 	var sites []string
 
-	arquivo, err := os.Open(nomeArquivo)
+	arquivo, err := os.Open(arquivoSites)
 
 	if err != nil {
 		fmt.Println("Ocorreu um erro:", err)
@@ -49,7 +66,7 @@ func leArquivo() []string {
 		linha, err := leitor.ReadString('\n')
 
 		linha = strings.TrimSpace(linha)
-		
+
 		sites = append(sites, linha)
 
 		if err == io.EOF {
@@ -86,6 +103,7 @@ func testaSite(site string) {
 	}
 
 	fmt.Println("O site", site, "está com statusCode:", res.StatusCode)
+	registraLog(site, res.StatusCode)
 }
 
 func exibeIntroducao() {
